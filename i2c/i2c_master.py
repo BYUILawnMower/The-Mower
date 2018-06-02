@@ -1,31 +1,39 @@
 import smbus
 import time
-# for RPI version 1, use “bus = smbus.SMBus(0)”
+import atexit
+# for RPI version 1, use "bus = smbus.SMBus(0)"
 bus = smbus.SMBus(1)
 
 # This is the address we setup in the Arduino Program
-address = 0x06
+MotorAddress = 0x04
 
 def writeNumber(value):
-    bus.write_byte(address, value)
-    # bus.write_byte_data(address, 0, value)
+    bus.write_byte(MotorAddress, value)
     return -1
 
 def readNumber():
-    number = bus.read_byte(address)
-# number = bus.read_byte_data(address, 1)
-    return number
+    state = bus.read_byte(MotorAddress)
+    return state
 
+def endProgram():
+    writeNumber(0)
+    return -1
+
+atexit.register(endProgram)
+
+# 0 = stop    
+# 1 = go straight
+# 2 = turn left
+# 3 = turn right
+inc = 0
 while True:
-    var = input(“Enter 1 – 9: “)
-    if not var:
-        continue
+    time.sleep(1)
+    state = readNumber()
 
-writeNumber(var)
-print “RPI: Hi Arduino, I sent you “, var
-# sleep one second
-time.sleep(1)
 
-number = readNumber()
-print “Arduino: Hey RPI, I received a digit “, number
-print
+    if state > 3:
+        state = 0;
+        print "If statement\n"    
+    writeNumber(state+1)
+    print state  
+

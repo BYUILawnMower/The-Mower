@@ -3,7 +3,7 @@ import RPi.GPIO as GPIO
 
 import smbus
 import time
-# for RPI version 1, use "bus = smbus.SMBus(0)"
+
 bus = smbus.SMBus(1)
 
 # This is the address we setup in the Arduino Program
@@ -14,21 +14,21 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(24, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 
-def callback24(channel):  
-    print "Rising edge detected on port 24.\n"
-    number = readNumber()
+def arduinoInterrupt(channel):  
+    print "The arduino requests a data pull.\n"
+    number = readData()
     print "Number received "
     print number
     print "\n"
     
-GPIO.add_event_detect(24, GPIO.RISING, callback=callback24)
+GPIO.add_event_detect(24, GPIO.RISING, callback=arduinoInterrupt)
 
-def writeNumber(value):
+def writeData(value):
     bus.write_byte(address, value)
     # bus.write_byte_data(address, 0, value)
     return -1
 
-def readNumber():
+def readData():
     number = bus.read_byte(address)
 # number = bus.read_byte_data(address, 1)
     return number
