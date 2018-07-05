@@ -21,5 +21,6 @@ while True:
         time.sleep(1)
 
     except KeyboardInterrupt:
+        motor.stop()
         print "\nClosing Program\n"
         sys.exit(0)
