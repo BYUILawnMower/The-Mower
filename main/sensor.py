@@ -8,4 +8,5 @@ SENSOR_ARDUINO  = 0x06
 
 def getUpdate():
     update = i2c.readData(SENSOR_ARDUINO)
+    return update
     
