@@ -4,22 +4,26 @@ from tkinter import *
 #imports
 import time
 import RPi.GPIO as GPIO
+from gpiozero import LED
 
 
-#Set up GPIO with BCM not BOARD
+#Set up GPIO with BCM for button
 GPIO.setmode(GPIO.BCM)
-#GPIO.setup(35, GPIO.OUT)
 GPIO.setup(26, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-#Integrate this function later to light LED
-def say_hi():
-    print ("Lighting up LED")
- #   GPIO.output(35, GPIO.HIGH)
-    #time.sleep(5)
- #   GPIO.output(35, GPIO.LOW)
+#Set LED output with gpiozero lib
+led=LED(21)
 
+#LED turn on/off function
+def ledToggle():
+    if led.is_lit:
+        led.off()
+        ledButton["text"]="Turn LED On"
+    else:
+        led.on()
+        ledButton["text"]="Turn LED Off"
 
-#Fucntion for button push (puts notification on screen if pushed)
+#function for button press
 def check_button():
     if (GPIO.input(26) == GPIO.LOW):
         labelText.set("Button Pressed.")
@@ -30,7 +34,7 @@ def check_button():
     root.after(10, check_button)
 
 
-
+    
 #Set tkinter main window
 root = Tk()
 
@@ -39,8 +43,8 @@ button = Button(root, text="Quit.", fg="red", command=quit)
 button.pack(side=RIGHT, padx=10, pady=10, ipadx=10, ipady=10)
 
 #Setup lightButton for later
-hi_there = Button(root, text="Light my LED!", command=say_hi)
-hi_there.pack(side=LEFT, padx=10, pady=10, ipadx=10, ipady=10)
+ledButton = Button(root, text='Turn LED On', command=ledToggle, bg='bisque2', height=1, width=24)
+ledButton.pack(side=LEFT, padx=10, pady=10, ipadx=10, ipady=10)
 
 #Label (for "root" window) for incomming message when button pressed
 labelText = StringVar()
