@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import atexit
 import blade
 import i2c
