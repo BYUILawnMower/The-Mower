@@ -1,5 +1,5 @@
-#!/usr/bin/env python3
-from tkinter import *
+#!/usr/bin/env python
+from Tkinter import *
 
 #imports
 import time
